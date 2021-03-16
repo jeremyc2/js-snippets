@@ -1,8 +1,64 @@
+<style>
+    #gistList .copy-button {
+        width: 100%;
+        height: 36px;
+        font: 12px -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+        padding: 10px;
+        color: #586069;
+        background-color: #f7f7f7;
+        border: none;
+        border-style: solid;
+        border-radius: 6px 6px 6px 6px;
+        border-color: rgb(221, 221, 221);
+        border-width: 1px;
+        margin-bottom: 2px;
+    }
+    #gistList .copy-button:hover{
+        background-color: #d8d8d8 !important;
+    }
+    #gistList .gist-data{
+        height: 100px;
+    }
+</style>
 <div id="gistList">
-    <script src="https://gist.github.com/jeremyc2/2357920ade14da95afd8265c39e89d54.js"></script>
-    <script src="https://gist.github.com/jeremyc2/e00af3d56ddadbf9eb5e5b166b179e19.js"></script>
+    <script class="append-gist" src="https://gist.github.com/jeremyc2/2357920ade14da95afd8265c39e89d54.js"></script>
 </div>
 <script>
-    var gistTexts = [...document.querySelectorAll("#gistList .gist-data")]
-        .map(gist => gist.innerText);
+    function copy(text) {
+
+        let input = document.createElement("textarea");
+
+        input.innerHTML = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand("copy");
+        document.body.removeChild(input);
+        return text;
+
+    }
+
+    let gistList = document.querySelectorAll(".append-gist");
+
+    gistList.forEach(gist => {
+        let copyButton = document.createElement("button");
+
+        copyButton.classList.add("copy-button");
+
+        copyButton.innerText = "COPY";
+
+        copyButton.addEventListener("click", function() {
+            let gistText = this.nextElementSibling.nextElementSibling
+                .querySelector(".gist-data").innerText;
+
+            copy(gistText);
+
+            if(this.innerText != "COPIED!") {
+                this.innerText = "COPIED!";
+                setTimeout(() => this.innerText = "COPY", 2000);
+            }
+        });
+
+        gist.parentElement.insertBefore(copyButton, gist.nextElementSibling);
+    });
+    
 </script>
