@@ -2,10 +2,11 @@
     #gistList {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-evenly;
+        justify-content: center;
     }
     #gistList > div {
         max-width: min(450px,100%);
+        margin: 5px;
     }
     #gistList .copy-button {
         width: 100%;
@@ -16,13 +17,17 @@
         background-color: #f7f7f7;
         border: none;
         border-style: solid;
-        border-radius: 6px 6px 6px 6px;
+        border-radius: 6px;
         border-color: rgb(221, 221, 221);
         border-width: 1px;
         margin-bottom: 2px;
+        background-image: url(content_copy_black_24dp.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+        font-weight: bold;
     }
     #gistList .copy-button:hover{
-        background-color: #d8d8d8 !important;
+        background-color: #d8d8d8;
     }
     #gistList .gist-data{
         height: 100px;
@@ -54,8 +59,6 @@
 
         copyButton.classList.add("copy-button");
 
-        copyButton.innerText = "COPY";
-
         copyButton.addEventListener("click", function() {
             let gistText = this.nextElementSibling.nextElementSibling
                 .querySelector(".gist-data").innerText;
@@ -64,7 +67,11 @@
 
             if(this.innerText != "COPIED!") {
                 this.innerText = "COPIED!";
-                setTimeout(() => this.innerText = "COPY", 2000);
+                this.style.backgroundImage = "none";
+                setTimeout(() => {
+                    this.innerText = "";
+                    this.style.backgroundImage = "";
+                }, 2000);
             }
         });
 
