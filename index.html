@@ -10,6 +10,8 @@
         margin: 5px;
     }
     #gistList .copy-button {
+        position: relative;
+        top: 3px;
         width: 100%;
         height: 36px;
         font: 12px -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
@@ -18,10 +20,9 @@
         background-color: #f7f7f7;
         border: none;
         border-style: solid;
-        border-radius: 6px;
+        border-radius: 6px 6px 0 0;
         border-color: rgb(221, 221, 221);
         border-width: 1px;
-        margin-bottom: 2px;
         background-image: url(content_copy_black_24dp.svg);
         background-repeat: no-repeat;
         background-position: center;
@@ -31,12 +32,12 @@
         background-color: #d8d8d8;
     }
     #gistList .gist-data{
-        height: 100px;
+        max-height: 100px;
     }
 </style>
 <div id="gistList">
     <div>
-        <script class="append-gist" src="https://gist.github.com/jeremyc2/2357920ade14da95afd8265c39e89d54.js"></script>
+        <script src="https://gist.github.com/jeremyc2/2357920ade14da95afd8265c39e89d54.js"></script>
     </div>
 </div>
 <script>
@@ -53,16 +54,24 @@
 
     }
 
-    let gistList = document.querySelectorAll(".append-gist");
+    let gistList = document.querySelectorAll(".gist-file");
 
     gistList.forEach(gist => {
+
+        // Must be a javascript file gist
+        if(!gist.querySelectorAll(".gist-meta a")[1].innerText.endsWith(".js")) {
+            gist.parentElement.removeChild(gist);
+            return;
+        }
+
         let copyButton = document.createElement("button");
 
         copyButton.classList.add("copy-button");
 
         copyButton.addEventListener("click", function() {
-            let gistText = this.nextElementSibling.nextElementSibling
-                .querySelector(".gist-data").innerText;
+            let gistText = [...gist.querySelectorAll(".blob-code-inner")].map(
+                gist => gist.innerText == "\n"? "": gist.innerText
+            ).join("\n");
 
             copy(gistText);
 
@@ -76,7 +85,7 @@
             }
         });
 
-        gist.parentElement.insertBefore(copyButton, gist.nextElementSibling);
+        gist.parentElement.insertBefore(copyButton, gist);
     });
     
 </script>
